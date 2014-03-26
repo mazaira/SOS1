@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
+			 xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+			 xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" 
+			 xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" 
+			 xmlns:tns="http://flightbooking.t3.sos.fi.upm.es" 
+			 xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" 
+			 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			 xmlns:whttp="http://www.w3.org/ns/wsdl/http" 
+			 targetNamespace="http://flightbooking.t3.sos.fi.upm.es">
+		<wsdl2:types>
+        <xs:schema attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://flightbooking.t3.sos.fi.upm.es">
+				   
+			
+			<xs:element name="checkingFlight">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="origin" type="xs:string"/>
+						<xs:element name="destination" type="xs:string"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="checkingFlightResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="seatAvailability" type="xs:int"/>
+						<xs:element name="price" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingFlight">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="origin" type="xs:string"/>
+						<xs:element name="destination" type="xs:string"/>
+						<xs:element name="seat" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingFlightResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="bookingResult" type="xs:boolean"/>
+						<xs:element name="price" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingFlight">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="origin" type="xs:string"/>
+						<xs:element name="destination" type="xs:string"/>
+						<xs:element name="seat" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingFlightResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="cancellingResult" type="xs:boolean"/>
+						<xs:element name="returnedMoney" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+	
+			<xs:element name="origin" type="xs:string"/>
+			
+			<xs:element name="originList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="origin" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+			
+			<xs:element name="destinationList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="destination" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+			<xs:element name="notEnoughSeatsErrorMessage" type="xs:string"/>
+			<xs:element name="notValidOriginErrorMessage" type="xs:string"/>
+			<xs:element name="notValidDestinationErrorMessage" type="xs:string"/>
+			<xs:element name="notValidSeatErrorMessage" type="xs:string"/>
+			
+			   
+        </xs:schema>
+    </wsdl2:types>
+    
+    <wsdl2:interface name="flightBookingInterface">
+        
+        <!-- Possible faults in interface -->
+        <wsdl2:fault name="NotEnoughSeatsError" element="tns:notEnoughSeatsErrorMessage"/>
+        <wsdl2:fault name="NotValidOriginError" element="tns:notValidOriginErrorMessage"/>
+        <wsdl2:fault name="NotValidDestinationError" element="tns:notValidDestinationErrorMessage"/>
+        <wsdl2:fault name="NotValidSeatError" element="tns:notValidSeatErrorMessage"/> 
+
+        <!-- the RPC style makes easier to map operations to single Java (or C#
+        or whatever) methods, only applicable to in-out or in-only MEPs -->
+        
+        
+        <wsdl2:operation name="getOriginList" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="#none" wsaw:Action="urn:getOriginList"/>
+            <wsdl2:output element="tns:originList" wsaw:Action="urn:getOriginListResponse"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="getDestinationList" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:origin" wsaw:Action="urn:getDestinationList"/>
+            <wsdl2:output element="tns:destinationList" wsaw:Action="urn:getDestinationListResponse"/>
+            <wsdl2:outfault ref="tns:NotValidOriginError" wsaw:Action="urn:getDestinationListError"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="checkFlight" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:checkingFlight" wsaw:Action="urn:checkFlight"/>
+            <wsdl2:output element="tns:checkingFlightResponse" wsaw:Action="urn:checkFlightResponse"/>
+            <wsdl2:outfault ref="tns:NotValidOriginError" wsaw:Action="urn:checkFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidDestinationError" wsaw:Action="urn:checkFlightError"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="bookFlight" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:bookingFlight" wsaw:Action="urn:bookingFlight"/>
+            <wsdl2:output element="tns:bookingFlightResponse" wsaw:Action="urn:bookingFlightResponse"/>
+            <wsdl2:outfault ref="tns:NotValidOriginError" wsaw:Action="urn:bookingFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidDestinationError" wsaw:Action="urn:bookingFlightError"/>
+            <wsdl2:outfault ref="tns:NotEnoughSeatsError" wsaw:Action="urn:bookingFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidSeatError" wsaw:Action="urn:bookingFlightError"/>
+        </wsdl2:operation>
+        
+        <wsdl2:operation name="cancelFlight" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:cancellingFlight" wsaw:Action="urn:cancellingFlight"/>
+            <wsdl2:output element="tns:cancellingFlightResponse" wsaw:Action="urn:cancellingFlightResponse"/>
+            <wsdl2:outfault ref="tns:NotValidOriginError" wsaw:Action="urn:cancellingFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidDestinationError" wsaw:Action="urn:cancellingFlightError"/>
+            <wsdl2:outfault ref="tns:NotEnoughSeatsError" wsaw:Action="urn:cancellingFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidSeatError" wsaw:Action="urn:cancellingFlightError"/>
+        </wsdl2:operation> 
+               
+    </wsdl2:interface>
+
+
+    <!-- Binding with SOAP (1.2, which is a W3C recommendation) -->
+    <wsdl2:binding name="flightBookingSOAP12Binding"
+    interface="tns:flightBookingInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:version="1.2">
+        <!-- With whttp:mep we specify how to map the in-out WSDL MEP to a SOAP MEP (request-response in this case) -->
+        <!-- The whttp:action will be added as a header in the HTTP message -->
+        <wsdl2:operation ref="tns:getOriginList" wsoap:action="urn:getOriginList"/>
+        <wsdl2:operation ref="tns:getDestinationList" wsoap:action="urn:getDestinationList"/>
+        <wsdl2:operation ref="tns:checkFlight"  wsoap:action="urn:checkFlight"/>
+        <wsdl2:operation ref="tns:bookFlight" wsoap:action="urn:bookFlight"/>
+        <wsdl2:operation ref="tns:cancelFlight" wsoap:action="urn:cancelFlight"/>
+    </wsdl2:binding>
+
+    <wsdl2:service name="FlightBookingWS" interface="tns:flightBookingInterface">
+        <wsdl2:endpoint name="flightBookingEndPoint" binding="tns:flightBookingSOAP12Binding" address="http://adapt08.ls.fi.upm.es:8080/axis2/services/FlightBookingWS"/>
+    </wsdl2:service>
+</wsdl2:description>

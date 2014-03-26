@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST) -->
+<serviceGroup>
+    <service name="TravelAgencyWS" scope="soapsession">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="es.upm.fi.sos.t3.travelagency.TravelAgencyWSMessageReceiverInOut"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/robust-in-only" class="es.upm.fi.sos.t3.travelagency.TravelAgencyWSMessageReceiverRobustInOnly"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">es.upm.fi.sos.t3.travelagency.TravelAgencyWSSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="checkTrip" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:checkTrip</actionMapping>
+            <outputActionMapping>urn:checkTripResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:checkTripNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidDestinationFlightError">urn:checkTripNotValidDestinationFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:checkTripNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidHotelHotelError">urn:checkTripNotValidHotelHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:checkTripRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:checkTripNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="cancelOnlyHotel" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:cancelOnlyHotel</actionMapping>
+            <outputActionMapping>urn:cancellingOnlyHotelResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:cancelOnlyHotelNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidHotelHotelError">urn:cancelOnlyHotelNotValidHotelHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughRoomsHotelError">urn:cancelOnlyHotelNotEnoughRoomsHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidRoomHotelError">urn:cancelOnlyHotelNotValidRoomHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:cancelOnlyHotelRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:cancelOnlyHotelNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="login" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:login</actionMapping>
+            <outputActionMapping>urn:loginResponse</outputActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:loginRemoteServiceError</faultActionMapping>
+        </operation>
+        <operation name="getCityHotelList" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:getCityHotelList</actionMapping>
+            <outputActionMapping>urn:getCityHotelListResponse</outputActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:getCityHotelListRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:getCityHotelListNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="bookTrip" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:bookTrip</actionMapping>
+            <outputActionMapping>urn:bookingTripResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:bookTripNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidDestinationFlightError">urn:bookTripNotValidDestinationFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughSeatsFlightError">urn:bookTripNotEnoughSeatsFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSeatFlightError">urn:bookTripNotValidSeatFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:bookTripNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidHotelHotelError">urn:bookTripNotValidHotelHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughRoomsHotelError">urn:bookTripNotEnoughRoomsHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidRoomHotelError">urn:bookTripNotValidRoomHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:bookTripRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:bookTripNotValidSessionError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughBudgetError">urn:bookTripNotEnoughBudgetError</faultActionMapping>
+        </operation>
+        <operation name="getBudget" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:getBudget</actionMapping>
+            <outputActionMapping>urn:getBudgetResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:getBudgetNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="getOriginFlightList" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:getOriginFlightList</actionMapping>
+            <outputActionMapping>urn:getOriginFlightListResponse</outputActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:getOriginFlightListRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:getOriginFlightListNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="checkOnlyHotel" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:checkOnlyHotel</actionMapping>
+            <outputActionMapping>urn:checkOnlyHotelResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:checkOnlyHotelNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidHotelHotelError">urn:checkOnlyHotelNotValidHotelHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:checkOnlyHotelRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:checkOnlyHotelNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="getDestinationFlightList" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:getDestinationFlightList</actionMapping>
+            <outputActionMapping>urn:getDestinationFlightListResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:getDestinationFlightListNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:getDestinationFlightListRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:getDestinationFlightListNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="getHotelHotelList" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:getHotelHotelList</actionMapping>
+            <outputActionMapping>urn:getHotelHotelListResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:getHotelHotelListNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:getHotelHotelListRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:getHotelHotelListNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="logout" mep="http://www.w3.org/ns/wsdl/robust-in-only" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:logout</actionMapping>
+            <outputActionMapping>urn:logoutResponse</outputActionMapping>
+        </operation>
+        <operation name="bookOnlyHotel" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:bookOnlyHotel</actionMapping>
+            <outputActionMapping>urn:bookingOnlyHotelResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidCityHotelError">urn:bookOnlyHotelNotValidCityHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidHotelHotelError">urn:bookOnlyHotelNotValidHotelHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughRoomsHotelError">urn:bookOnlyHotelNotEnoughRoomsHotelError</faultActionMapping>
+            <faultActionMapping faultName="NotValidRoomHotelError">urn:bookOnlyHotelNotValidRoomHotelError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:bookOnlyHotelRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:bookOnlyHotelNotValidSessionError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughBudgetError">urn:bookOnlyHotelNotEnoughBudgetError</faultActionMapping>
+        </operation>
+        <operation name="cancelOnlyFlight" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:cancelOnlyFlight</actionMapping>
+            <outputActionMapping>urn:cancellingOnlyFlightResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:cancelOnlyFlightNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidDestinationFlightError">urn:cancelOnlyFlightNotValidDestinationFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughSeatsFlightError">urn:cancelOnlyFlightNotEnoughSeatsFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSeatFlightError">urn:cancelOnlyFlightNotValidSeatFlightError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:cancelOnlyFlightRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:cancelOnlyFlightNotValidSessionError</faultActionMapping>
+        </operation>
+        <operation name="bookOnlyFlight" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:bookOnlyFlight</actionMapping>
+            <outputActionMapping>urn:bookingOnlyFlightResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:bookOnlyFlightNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidDestinationFlightError">urn:bookOnlyFlightNotValidDestinationFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughSeatsFlightError">urn:bookOnlyFlightNotEnoughSeatsFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSeatFlightError">urn:bookOnlyFlightNotValidSeatFlightError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:bookOnlyFlightRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:bookOnlyFlightNotValidSessionError</faultActionMapping>
+            <faultActionMapping faultName="NotEnoughBudgetError">urn:bookOnlyFlightNotEnoughBudgetError</faultActionMapping>
+        </operation>
+        <operation name="checkOnlyFlight" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://travelagency.t3.sos.fi.upm.es">
+            <actionMapping>urn:checkOnlyFlight</actionMapping>
+            <outputActionMapping>urn:checkOnlyFlightResponse</outputActionMapping>
+            <faultActionMapping faultName="NotValidOriginFlightError">urn:checkOnlyFlightNotValidOriginFlightError</faultActionMapping>
+            <faultActionMapping faultName="NotValidDestinationFlightError">urn:checkOnlyFlightNotValidDestinationFlightError</faultActionMapping>
+            <faultActionMapping faultName="RemoteServiceError">urn:checkOnlyFlightRemoteServiceError</faultActionMapping>
+            <faultActionMapping faultName="NotValidSessionError">urn:checkOnlyFlightNotValidSessionError</faultActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

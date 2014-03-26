@@ -1,0 +1,59 @@
+/* Comprobacion de datos de entrada correctos */
+		             
+		             //getOriginList(); list.contains(origen); NotValidOriginFlightError
+		             OriginFlightList listaOrigenesVuelos = getOriginFlightList();
+		             String[] listaOrigenes = listaOrigenesVuelos.getOrigin();
+		             
+		             /*
+		             boolean perteneceOFL = false;
+		             for(int i=0;i<listaOrigenes.length && !perteneceOFL;i++){
+		            	 if(listaOrigenes[i] == origen){
+		            		 perteneceOFL = true;
+		            	 }
+		             }
+		             if(!perteneceOFL) throw new NotValidOriginFlightError();
+		             */
+		                             
+		             //getDestinationList(origen); list2.contains(destino); NotValidDestinationFlightError
+		             OriginFlight originFlight = new OriginFlight();
+		             originFlight.setOriginFlight(origen);
+		             DestinationFlightList listaDestinosVuelos = getDestinationFlightList(originFlight);
+		             String[] listaDestinos = listaDestinosVuelos.getDestination();
+		            		 
+		             /*
+		             boolean perteneceDFL = false;
+		             for(int i=0;i<listaDestinos.length && !perteneceDFL;i++){
+		            	 if(listaDestinos[i] == destino){
+		            		 perteneceDFL = true;
+		            	 }
+		             }
+		             if(!perteneceDFL) throw new NotValidDestinationFlightError();
+		             */
+		             
+		             //getCityList(); list3.contains(destino); NotValidCityHotelError
+		             String[] listaCiudades = getCityHotelList().getCity();
+		             
+		             /*
+		             boolean perteneceCHL = false;
+		             for(int i=0;i<listaCiudades.length && !perteneceCHL;i++){
+		            	 if(listaCiudades[i] == destino){
+		            		 perteneceCHL = true;
+		            	 }
+		             }
+		             if(!perteneceCHL) throw new NotValidCityHotelError();
+		             */
+		             
+		             //getHotelList(destino); list4.contains(hotel); NotValidHotelHotelError
+		             CityHotel cityHotel = new CityHotel();
+		             cityHotel.setCityHotel(destino);;
+		             String[] listaHoteles = getHotelHotelList(cityHotel).getHotel();
+		             
+		             /*
+		             boolean perteneceHL = false;
+		             for(int i=0;i<listaHoteles.length && !perteneceHL;i++){
+		            	 if(listaHoteles[i] == hotel){
+		            		 perteneceHL = true;
+		            	 }
+		             }
+		             if(!perteneceHL) throw new NotValidHotelHotelError();
+                     */

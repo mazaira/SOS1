@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
+			 xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+			 xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" 
+			 xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" 
+			 xmlns:tns="http://loginservice.t3.sos.fi.upm.es" 
+			 xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" 
+			 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			 xmlns:whttp="http://www.w3.org/ns/wsdl/http" 
+			 targetNamespace="http://loginservice.t3.sos.fi.upm.es">
+		<wsdl2:types>
+        <xs:schema attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://loginservice.t3.sos.fi.upm.es">
+				   
+			
+			<xs:element name="loginToken">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" name="username" nillable="false" type="xs:string" />
+						<xs:element minOccurs="1" name="password" nillable="false" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+            <xs:element name="loginTokenResponse" minOccurs="1" nillable="false"	type="xs:boolean" />
+            
+			<xs:element name="loginErrorMessage" type="xs:string"/>
+			   
+        </xs:schema>
+    </wsdl2:types>
+    
+    <wsdl2:interface name="loginServiceInterface">
+        
+        <!-- Possible faults in interface -->
+        <wsdl2:fault name="LoginError" element="tns:loginErrorMessage" />
+
+        <!-- the RPC style makes easier to map operations to single Java (or C#
+        or whatever) methods, only applicable to in-out or in-only MEPs -->
+        <wsdl2:operation name="authenticateUser"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:loginToken" wsaw:Action="urn:authenticateUser" />
+			<wsdl2:output element="tns:loginTokenResponse" wsaw:Action="urn:authenticateUserResponse" />
+			<wsdl2:outfault ref="tns:LoginError" wsaw:Action="urn:authenticateUserError" />
+		</wsdl2:operation>
+        
+        
+               
+    </wsdl2:interface>
+
+
+    <!-- Binding with SOAP (1.2, which is a W3C recommendation) -->
+    <wsdl2:binding name="loginServiceSOAP12Binding"
+    interface="tns:loginServiceInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:version="1.2">
+        <!-- With whttp:mep we specify how to map the in-out WSDL MEP to a SOAP MEP (request-response in this case) -->
+        <!-- The whttp:action will be added as a header in the HTTP message -->
+        <wsdl2:operation ref="tns:authenticateUser" wsoap:action="urn:authenticateUser"/>
+        
+    </wsdl2:binding>
+
+    <wsdl2:service name="LoginServiceWS" interface="tns:loginServiceInterface">
+        <wsdl2:endpoint name="loginServiceEndPoint" binding="tns:loginServiceSOAP12Binding" address="http://adapt08.ls.fi.upm.es:8080/axis2/services/LoginServiceWS"/>
+    </wsdl2:service>
+</wsdl2:description>

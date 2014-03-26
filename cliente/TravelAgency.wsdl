@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc"
+	xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" xmlns:tns="http://travelagency.t3.sos.fi.upm.es"
+	xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:whttp="http://www.w3.org/ns/wsdl/http" targetNamespace="http://travelagency.t3.sos.fi.upm.es">
+	<wsdl2:types>
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified" targetNamespace="http://travelagency.t3.sos.fi.upm.es">
+
+
+			<xs:element name="login">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" name="username" nillable="false"
+							type="xs:string" />
+						<xs:element minOccurs="1" name="password" nillable="false"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="loginResponse" minOccurs="1" nillable="false"
+				type="xs:boolean" />
+
+			<xs:element name="budget" minOccurs="1" nillable="false"
+				type="xs:double" />
+
+			<xs:element name="checkingTrip">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="origin" type="xs:string" />
+						<xs:element name="destination" type="xs:string" />
+						<xs:element name="hotel" type="xs:string" />						
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="checkingTripResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="seatAvailability" type="xs:int" />
+						<xs:element name="roomAvailability" type="xs:int" />
+						<xs:element name="roomPrice" type="xs:double" />
+						<xs:element name="seatPrice" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			
+			<xs:element name="bookingTrip">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="origin" type="xs:string" />
+						<xs:element name="destination" type="xs:string" />
+						<xs:element name="hotel" type="xs:string" />
+						<xs:element name="seat" type="xs:int" />
+						<xs:element name="room" type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingTripResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="bookingResult" type="xs:boolean" />
+						<xs:element name="price" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			
+			<!--  Only Flight Data -->
+
+			<xs:element name="checkingOnlyFlight">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="origin" type="xs:string" />
+						<xs:element name="destination" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="checkingOnlyFlightResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="seatAvailability" type="xs:int" />
+						<xs:element name="price" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="bookingOnlyFlight">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="origin" type="xs:string" />
+						<xs:element name="destination" type="xs:string" />
+						<xs:element name="seat" type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingOnlyFlightResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="bookingResult" type="xs:boolean" />
+						<xs:element name="price" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingOnlyFlight">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="origin" type="xs:string"/>
+						<xs:element name="destination" type="xs:string"/>
+						<xs:element name="seat" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingOnlyFlightResponse" type="xs:boolean"/>
+
+			<xs:element name="originFlight" type="xs:string" />
+
+			<xs:element name="originFlightList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="origin" minOccurs="0" maxOccurs="unbounded"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="destinationFlightList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="destination" minOccurs="0" maxOccurs="unbounded"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<!--  Only Hotel Data -->
+
+			<xs:element name="checkingOnlyHotel">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="city" type="xs:string" />
+						<xs:element name="hotel" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="checkingOnlyHotelResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="roomAvailability" type="xs:int" />
+						<xs:element name="price" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="bookingOnlyHotel">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="city" type="xs:string" />
+						<xs:element name="hotel" type="xs:string" />
+						<xs:element name="room" type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingOnlyHotelResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="bookingResult" type="xs:boolean" />
+						<xs:element name="price" type="xs:double" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingOnlyHotel">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="city" type="xs:string"/>
+						<xs:element name="hotel" type="xs:string"/>
+						<xs:element name="room" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingOnlyHotelResponse" type="xs:boolean"/>
+
+			<xs:element name="cityHotel" type="xs:string" />
+
+			<xs:element name="cityHotelList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="city" minOccurs="0" maxOccurs="unbounded"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="hotelHotelList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="hotel" minOccurs="0" maxOccurs="unbounded"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+
+
+			<!-- Error messages -->
+		<xs:element name="notValidSessionErrorMessage" type="xs:string" />
+		<xs:element name="remoteServiceErrorMessage" type="xs:string" />
+		<xs:element name="notEnoughBudgetErrorMessage" type="xs:string" />
+		
+		
+		<xs:element name="notEnoughSeatsFlightErrorMessage" type="xs:string" />
+		<xs:element name="notValidOriginFlightErrorMessage" type="xs:string" />
+		<xs:element name="notValidDestinationFlightErrorMessage" type="xs:string" />
+		<xs:element name="notValidSeatFlightErrorMessage" type="xs:string" />
+		
+		<xs:element name="notEnoughRoomsHotelErrorMessage" type="xs:string" />
+		<xs:element name="notValidCityHotelErrorMessage" type="xs:string" />
+		<xs:element name="notValidHotelHotelErrorMessage" type="xs:string" />
+		<xs:element name="notValidRoomHotelErrorMessage" type="xs:string" />
+		
+		</xs:schema>
+	</wsdl2:types>
+
+	<wsdl2:interface name="travelAgencyInterface">
+
+		<!-- Possible faults in interface -->
+		<wsdl2:fault name="NotValidSessionError" element="tns:notValidSessionErrorMessage" />
+		<wsdl2:fault name="RemoteServiceError" element="tns:remoteServiceErrorMessage" />
+		<wsdl2:fault name="NotEnoughBudgetError" element="tns:notEnoughBudgetErrorMessage" />
+		
+		<wsdl2:fault name="NotEnoughSeatsFlightError" element="tns:notEnoughSeatsFlightErrorMessage" />
+		<wsdl2:fault name="NotValidOriginFlightError" element="tns:notValidOriginFlightErrorMessage" />
+		<wsdl2:fault name="NotValidDestinationFlightError" element="tns:notValidDestinationFlightErrorMessage" />
+		<wsdl2:fault name="NotValidSeatFlightError" element="tns:notValidSeatFlightErrorMessage" />
+		
+		<wsdl2:fault name="NotEnoughRoomsHotelError" element="tns:notEnoughRoomsHotelErrorMessage"/>
+        <wsdl2:fault name="NotValidCityHotelError" element="tns:notValidCityHotelErrorMessage"/>
+        <wsdl2:fault name="NotValidHotelHotelError" element="tns:notValidHotelHotelErrorMessage"/>
+        <wsdl2:fault name="NotValidRoomHotelError" element="tns:notValidRoomHotelErrorMessage"/>  
+		
+		<!-- the RPC style makes easier to map operations to single Java (or C# 
+			or whatever) methods, only applicable to in-out or in-only MEPs -->
+
+		<wsdl2:operation name="login"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:login" wsaw:Action="urn:login" />
+			<wsdl2:output element="tns:loginResponse" wsaw:Action="urn:loginResponse" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:loginError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="logout"
+			pattern="http://www.w3.org/ns/wsdl/robust-in-only">
+			<wsdl2:input element="#none" wsaw:Action="urn:logout" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="getBudget"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="#none" wsaw:Action="urn:getBudget" />
+			<wsdl2:output element="tns:budget" wsaw:Action="urn:getBudgetResponse" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"
+				wsaw:Action="urn:getBudgetError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="checkTrip"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:checkingTrip" wsaw:Action="urn:checkingTrip" />
+			<wsdl2:output element="tns:checkingTripResponse" 			wsaw:Action="urn:checkTripResponse" />
+			<wsdl2:outfault ref="tns:NotValidOriginFlightError"			wsaw:Action="urn:checkTripError" />
+			<wsdl2:outfault ref="tns:NotValidDestinationFlightError"	wsaw:Action="urn:checkTripError" />
+			<wsdl2:outfault ref="tns:NotValidCityHotelError"			wsaw:Action="urn:checkTripError" />
+			<wsdl2:outfault ref="tns:NotValidHotelHotelError"		 	wsaw:Action="urn:checkTripError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkTripError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:checkTripError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="bookTrip"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:bookingTrip" wsaw:Action="urn:bookingTrip" />
+			<wsdl2:output element="tns:bookingTripResponse"		wsaw:Action="urn:bookingTripResponse" />
+			
+			<wsdl2:outfault ref="tns:NotValidOriginFlightError" 		wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidDestinationFlightError"	wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotEnoughSeatsFlightError"			wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidSeatFlightError"			wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidCityHotelError" 			wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidHotelHotelError"			wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotEnoughRoomsHotelError" 			wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidRoomHotelError" 			wsaw:Action="urn:bookTripError" />
+			
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:bookTripError" />
+			<wsdl2:outfault ref="tns:NotEnoughBudgetError"	wsaw:Action="urn:bookTripError" />
+			
+		</wsdl2:operation>
+
+
+		<!--  Only Flight Operations -->
+
+		<wsdl2:operation name="getOriginFlightList"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="#none" wsaw:Action="urn:getOriginList" />
+			<wsdl2:output element="tns:originFlightList" wsaw:Action="urn:getOriginFlightListResponse" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getOriginFlightListError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:getOriginFlightListError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="getDestinationFlightList"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:originFlight" wsaw:Action="urn:getDestinationFlightList" />
+			<wsdl2:output element="tns:destinationFlightList" wsaw:Action="urn:getDestinationFlightListResponse" />
+			<wsdl2:outfault ref="tns:NotValidOriginFlightError"
+				wsaw:Action="urn:getDestinationFlightListError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getDestinationFlightListError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:getDestinationFlightListError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="checkOnlyFlight"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:checkingOnlyFlight" wsaw:Action="urn:checkOnlyFlight" />
+			<wsdl2:output element="tns:checkingOnlyFlightResponse"
+				wsaw:Action="urn:checkOnlyFlightResponse" />
+			<wsdl2:outfault ref="tns:NotValidOriginFlightError"
+				wsaw:Action="urn:checkOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotValidDestinationFlightError"
+				wsaw:Action="urn:checkOnlyFlightError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:checkOnlyFlightError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="bookOnlyFlight"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:bookingOnlyFlight" wsaw:Action="urn:bookingOnlyFlight" />
+			<wsdl2:output element="tns:bookingOnlyFlightResponse" wsaw:Action="urn:bookingOnlyFlightResponse" />
+			<wsdl2:outfault ref="tns:NotValidOriginFlightError"
+				wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotValidDestinationFlightError"
+				wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotEnoughSeatsFlightError"
+				wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotValidSeatFlightError"
+				wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:bookingOnlyFlightError" />
+			<wsdl2:outfault ref="tns:NotEnoughBudgetError"	wsaw:Action="urn:bookingOnlyFlightError" />
+		</wsdl2:operation>
+		
+		<wsdl2:operation name="cancelOnlyFlight" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:cancellingOnlyFlight" wsaw:Action="urn:cancellingOnlyFlight"/>
+            <wsdl2:output element="tns:cancellingOnlyFlightResponse" wsaw:Action="urn:cancellingOnlyFlightResponse"/>
+            <wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:cancellingOnlyFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:cancellingOnlyFlightError"/>
+            <wsdl2:outfault ref="tns:NotEnoughSeatsFlightError" wsaw:Action="urn:cancellingOnlyFlightError"/>
+            <wsdl2:outfault ref="tns:NotValidSeatFlightError" wsaw:Action="urn:cancellingOnlyFlightError"/>
+            <wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:cancellingOnlyFlightError" />
+            <wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:cancellingOnlyFlightError" />
+        </wsdl2:operation> 
+        
+        <!--  Only Hotel Operations -->
+
+		<wsdl2:operation name="getCityHotelList"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="#none" wsaw:Action="urn:getOriginList" />
+			<wsdl2:output element="tns:cityHotelList" wsaw:Action="urn:getCityHotelListResponse" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getCityHotelListError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:getCityHotelListError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="getHotelHotelList"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:cityHotel" wsaw:Action="urn:getDestinationList" />
+			<wsdl2:output element="tns:hotelHotelList" wsaw:Action="urn:getHotelHotelListResponse" />
+			<wsdl2:outfault ref="tns:NotValidCityHotelError"
+				wsaw:Action="urn:getHotelHotelListError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getHotelHotelListError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:getHotelHotelListError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="checkOnlyHotel"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:checkingOnlyHotel" wsaw:Action="urn:checkOnlyHotel" />
+			<wsdl2:output element="tns:checkingOnlyHotelResponse"
+				wsaw:Action="urn:checkOnlyHotelResponse" />
+			<wsdl2:outfault ref="tns:NotValidCityHotelError"
+				wsaw:Action="urn:checkOnlyHotelError" />
+			<wsdl2:outfault ref="tns:NotValidHotelHotelError"
+				wsaw:Action="urn:checkOnlyHotelError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkOnlyHotelError" />
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:checkOnlyHotelError" />
+		</wsdl2:operation>
+
+		<wsdl2:operation name="bookOnlyHotel"
+			style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+			<wsdl2:input element="tns:bookingOnlyHotel" wsaw:Action="urn:bookingOnlyHotel" />
+			<wsdl2:output element="tns:bookingOnlyHotelResponse" wsaw:Action="urn:bookingOnlyHotelResponse" />
+			<wsdl2:outfault ref="tns:NotValidCityHotelError"
+				wsaw:Action="urn:bookingOnlyHotelError" />
+			<wsdl2:outfault ref="tns:NotValidHotelHotelError"
+				wsaw:Action="urn:bookingOnlyHotelError" />
+			<wsdl2:outfault ref="tns:NotEnoughRoomsHotelError"
+				wsaw:Action="urn:bookingOnlyHotelError" />
+			<wsdl2:outfault ref="tns:NotValidRoomHotelError"
+				wsaw:Action="urn:bookingOnlyHotelError" />
+			<wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookingOnlyHotelError" />	
+			<wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:bookingOnlyHotelError" />		
+			<wsdl2:outfault ref="tns:NotEnoughBudgetError"	wsaw:Action="urn:bookingOnlyHotelError" />			
+		</wsdl2:operation>
+		
+		<wsdl2:operation name="cancelOnlyHotel" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:cancellingOnlyHotel" wsaw:Action="urn:cancellingOnlyHotel"/>
+            <wsdl2:output element="tns:cancellingOnlyHotelResponse" wsaw:Action="urn:cancellingOnlyHotelResponse"/>
+            <wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:cancellingOnlyHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:cancellingOnlyHotelError"/>
+            <wsdl2:outfault ref="tns:NotEnoughRoomsHotelError" wsaw:Action="urn:cancellingOnlyHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidRoomHotelError" wsaw:Action="urn:cancellingOnlyHotelError"/>
+            <wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:cancellingOnlyHotelError" />
+            <wsdl2:outfault ref="tns:NotValidSessionError"	wsaw:Action="urn:cancellingOnlyHotelError" />
+        </wsdl2:operation> 
+
+	</wsdl2:interface>
+
+
+	<!-- Binding with SOAP (1.2, which is a W3C recommendation) -->
+	<wsdl2:binding name="travelAgencySOAP12Binding"
+		interface="tns:travelAgencyInterface" type="http://www.w3.org/ns/wsdl/soap"
+		wsoap:version="1.2">
+		<!-- With whttp:mep we specify how to map the in-out WSDL MEP to a SOAP 
+			MEP (request-response in this case) -->
+		<!-- The whttp:action will be added as a header in the HTTP message -->
+		<wsdl2:operation ref="tns:login" wsoap:action="urn:login" />
+		<wsdl2:operation ref="tns:logout" wsoap:action="urn:logout" />
+		<wsdl2:operation ref="tns:getBudget" wsoap:action="urn:getBudget" />
+		<wsdl2:operation ref="tns:checkTrip" wsoap:action="urn:checkTrip" />
+		<wsdl2:operation ref="tns:bookTrip" wsoap:action="urn:bookTrip" />
+		
+		<wsdl2:operation ref="tns:getOriginFlightList" wsoap:action="urn:getOriginFlightList" />
+		<wsdl2:operation ref="tns:getDestinationFlightList" wsoap:action="urn:getDestinationFlightList" />
+		<wsdl2:operation ref="tns:checkOnlyFlight" wsoap:action="urn:checkOnlyFlight" />
+		<wsdl2:operation ref="tns:bookOnlyFlight" wsoap:action="urn:bookOnlyFlight" />
+		<wsdl2:operation ref="tns:cancelOnlyFlight" wsoap:action="urn:cancelOnlyFlight"/>
+		
+		<wsdl2:operation ref="tns:getCityHotelList" wsoap:action="urn:getCityHotelList" />
+		<wsdl2:operation ref="tns:getHotelHotelList" wsoap:action="urn:getHotelHotelList" />
+		<wsdl2:operation ref="tns:checkOnlyHotel" wsoap:action="urn:checkOnlyHotel" />
+		<wsdl2:operation ref="tns:bookOnlyHotel" wsoap:action="urn:bookOnlyHotel" />
+		<wsdl2:operation ref="tns:cancelOnlyHotel" wsoap:action="urn:cancelOnlyHotel"/>
+	</wsdl2:binding>
+
+	<wsdl2:service name="TravelAgencyWS" interface="tns:travelAgencyInterface">
+		<wsdl2:endpoint name="travelAgencyEndPoint" binding="tns:travelAgencySOAP12Binding"
+			address="http://localhost:8080/axis2/services/TravelAgencyWS" />
+	</wsdl2:service>
+</wsdl2:description>
