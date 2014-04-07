@@ -1,0 +1,177 @@
+<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" xmlns:tns="http://travelagency.t3.sos.fi.upm.es" xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:whttp="http://www.w3.org/ns/wsdl/http" targetNamespace="http://travelagency.t3.sos.fi.upm.es"><wsdl2:types><xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://travelagency.t3.sos.fi.upm.es">
+<xs:element name="login">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="username" type="xs:string" />
+<xs:element name="password" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="loginResponse" type="xs:boolean" />
+<xs:element name="budget" type="xs:double" />
+<xs:element name="checkingTrip">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="origin" type="xs:string" />
+<xs:element name="destination" type="xs:string" />
+<xs:element name="hotel" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="checkingTripResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="seatAvailability" type="xs:int" />
+<xs:element name="roomAvailability" type="xs:int" />
+<xs:element name="roomPrice" type="xs:double" />
+<xs:element name="seatPrice" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingTrip">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="origin" type="xs:string" />
+<xs:element name="destination" type="xs:string" />
+<xs:element name="hotel" type="xs:string" />
+<xs:element name="seat" type="xs:int" />
+<xs:element name="room" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingTripResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="bookingResult" type="xs:boolean" />
+<xs:element name="price" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="checkingOnlyFlight">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="origin" type="xs:string" />
+<xs:element name="destination" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="checkingOnlyFlightResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="seatAvailability" type="xs:int" />
+<xs:element name="price" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingOnlyFlight">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="origin" type="xs:string" />
+<xs:element name="destination" type="xs:string" />
+<xs:element name="seat" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingOnlyFlightResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="bookingResult" type="xs:boolean" />
+<xs:element name="price" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="cancellingOnlyFlight">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="origin" type="xs:string" />
+<xs:element name="destination" type="xs:string" />
+<xs:element name="seat" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="cancellingOnlyFlightResponse" type="xs:boolean" />
+<xs:element name="originFlight" type="xs:string" />
+<xs:element name="originFlightList">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="origin" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="destinationFlightList">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="destination" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="checkingOnlyHotel">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="city" type="xs:string" />
+<xs:element name="hotel" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="checkingOnlyHotelResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="roomAvailability" type="xs:int" />
+<xs:element name="price" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingOnlyHotel">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="city" type="xs:string" />
+<xs:element name="hotel" type="xs:string" />
+<xs:element name="room" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="bookingOnlyHotelResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="bookingResult" type="xs:boolean" />
+<xs:element name="price" type="xs:double" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="cancellingOnlyHotel">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="city" type="xs:string" />
+<xs:element name="hotel" type="xs:string" />
+<xs:element name="room" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="cancellingOnlyHotelResponse" type="xs:boolean" />
+<xs:element name="cityHotel" type="xs:string" />
+<xs:element name="cityHotelList">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="city" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="hotelHotelList">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="hotel" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="notValidSessionErrorMessage" type="xs:string" />
+<xs:element name="remoteServiceErrorMessage" type="xs:string" />
+<xs:element name="notEnoughBudgetErrorMessage" type="xs:string" />
+<xs:element name="notEnoughSeatsFlightErrorMessage" type="xs:string" />
+<xs:element name="notValidOriginFlightErrorMessage" type="xs:string" />
+<xs:element name="notValidDestinationFlightErrorMessage" type="xs:string" />
+<xs:element name="notValidSeatFlightErrorMessage" type="xs:string" />
+<xs:element name="notEnoughRoomsHotelErrorMessage" type="xs:string" />
+<xs:element name="notValidCityHotelErrorMessage" type="xs:string" />
+<xs:element name="notValidHotelHotelErrorMessage" type="xs:string" />
+<xs:element name="notValidRoomHotelErrorMessage" type="xs:string" />
+</xs:schema></wsdl2:types><wsdl2:interface name="travelAgencyInterface"><wsdl2:fault name="NotValidOriginFlightError" element="tns:notValidOriginFlightErrorMessage" /><wsdl2:fault name="NotValidDestinationFlightError" element="tns:notValidDestinationFlightErrorMessage" /><wsdl2:fault name="NotValidCityHotelError" element="tns:notValidCityHotelErrorMessage" /><wsdl2:fault name="NotValidHotelHotelError" element="tns:notValidHotelHotelErrorMessage" /><wsdl2:fault name="RemoteServiceError" element="tns:remoteServiceErrorMessage" /><wsdl2:fault name="NotValidSessionError" element="tns:notValidSessionErrorMessage" /><wsdl2:fault name="NotEnoughRoomsHotelError" element="tns:notEnoughRoomsHotelErrorMessage" /><wsdl2:fault name="NotValidRoomHotelError" element="tns:notValidRoomHotelErrorMessage" /><wsdl2:fault name="NotEnoughSeatsFlightError" element="tns:notEnoughSeatsFlightErrorMessage" /><wsdl2:fault name="NotValidSeatFlightError" element="tns:notValidSeatFlightErrorMessage" /><wsdl2:fault name="NotEnoughBudgetError" element="tns:notEnoughBudgetErrorMessage" /><wsdl2:operation name="checkTrip" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:checkingTrip" wsaw:Action="urn:checkingTrip" /><wsdl2:output element="tns:checkingTripResponse" wsaw:Action="urn:checkTripResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:checkTripNotValidOriginFlightError" /><wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:checkTripNotValidDestinationFlightError" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:checkTripNotValidCityHotelError" /><wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:checkTripNotValidHotelHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkTripRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:checkTripNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="cancelOnlyHotel" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:cancellingOnlyHotel" wsaw:Action="urn:cancellingOnlyHotel" /><wsdl2:output element="tns:cancellingOnlyHotelResponse" wsaw:Action="urn:cancellingOnlyHotelResponse" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:cancelOnlyHotelNotValidCityHotelError" /><wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:cancelOnlyHotelNotValidHotelHotelError" /><wsdl2:outfault ref="tns:NotEnoughRoomsHotelError" wsaw:Action="urn:cancelOnlyHotelNotEnoughRoomsHotelError" /><wsdl2:outfault ref="tns:NotValidRoomHotelError" wsaw:Action="urn:cancelOnlyHotelNotValidRoomHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:cancelOnlyHotelRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:cancelOnlyHotelNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="login" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:login" wsaw:Action="urn:login" /><wsdl2:output element="tns:loginResponse" wsaw:Action="urn:loginResponse" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:loginRemoteServiceError" /></wsdl2:operation><wsdl2:operation name="getCityHotelList" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="#none" wsaw:Action="urn:getOriginList" /><wsdl2:output element="tns:cityHotelList" wsaw:Action="urn:getCityHotelListResponse" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getCityHotelListRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:getCityHotelListNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="bookTrip" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:bookingTrip" wsaw:Action="urn:bookingTrip" /><wsdl2:output element="tns:bookingTripResponse" wsaw:Action="urn:bookingTripResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:bookTripNotValidOriginFlightError" /><wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:bookTripNotValidDestinationFlightError" /><wsdl2:outfault ref="tns:NotEnoughSeatsFlightError" wsaw:Action="urn:bookTripNotEnoughSeatsFlightError" /><wsdl2:outfault ref="tns:NotValidSeatFlightError" wsaw:Action="urn:bookTripNotValidSeatFlightError" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:bookTripNotValidCityHotelError" /><wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:bookTripNotValidHotelHotelError" /><wsdl2:outfault ref="tns:NotEnoughRoomsHotelError" wsaw:Action="urn:bookTripNotEnoughRoomsHotelError" /><wsdl2:outfault ref="tns:NotValidRoomHotelError" wsaw:Action="urn:bookTripNotValidRoomHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookTripRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:bookTripNotValidSessionError" /><wsdl2:outfault ref="tns:NotEnoughBudgetError" wsaw:Action="urn:bookTripNotEnoughBudgetError" /></wsdl2:operation><wsdl2:operation name="getBudget" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="#none" wsaw:Action="urn:getBudget" /><wsdl2:output element="tns:budget" wsaw:Action="urn:getBudgetResponse" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:getBudgetNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="getOriginFlightList" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="#none" wsaw:Action="urn:getOriginList" /><wsdl2:output element="tns:originFlightList" wsaw:Action="urn:getOriginFlightListResponse" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getOriginFlightListRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:getOriginFlightListNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="checkOnlyHotel" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:checkingOnlyHotel" wsaw:Action="urn:checkOnlyHotel" /><wsdl2:output element="tns:checkingOnlyHotelResponse" wsaw:Action="urn:checkOnlyHotelResponse" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:checkOnlyHotelNotValidCityHotelError" /><wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:checkOnlyHotelNotValidHotelHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkOnlyHotelRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:checkOnlyHotelNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="getDestinationFlightList" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:originFlight" wsaw:Action="urn:getDestinationFlightList" /><wsdl2:output element="tns:destinationFlightList" wsaw:Action="urn:getDestinationFlightListResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:getDestinationFlightListNotValidOriginFlightError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getDestinationFlightListRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:getDestinationFlightListNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="getHotelHotelList" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:cityHotel" wsaw:Action="urn:getDestinationList" /><wsdl2:output element="tns:hotelHotelList" wsaw:Action="urn:getHotelHotelListResponse" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:getHotelHotelListNotValidCityHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:getHotelHotelListRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:getHotelHotelListNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="logout" pattern="http://www.w3.org/ns/wsdl/robust-in-only" wsdlx:safe="false"><wsdl2:input element="#none" wsaw:Action="urn:logout" /></wsdl2:operation><wsdl2:operation name="bookOnlyHotel" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:bookingOnlyHotel" wsaw:Action="urn:bookingOnlyHotel" /><wsdl2:output element="tns:bookingOnlyHotelResponse" wsaw:Action="urn:bookingOnlyHotelResponse" /><wsdl2:outfault ref="tns:NotValidCityHotelError" wsaw:Action="urn:bookOnlyHotelNotValidCityHotelError" /><wsdl2:outfault ref="tns:NotValidHotelHotelError" wsaw:Action="urn:bookOnlyHotelNotValidHotelHotelError" /><wsdl2:outfault ref="tns:NotEnoughRoomsHotelError" wsaw:Action="urn:bookOnlyHotelNotEnoughRoomsHotelError" /><wsdl2:outfault ref="tns:NotValidRoomHotelError" wsaw:Action="urn:bookOnlyHotelNotValidRoomHotelError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookOnlyHotelRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:bookOnlyHotelNotValidSessionError" /><wsdl2:outfault ref="tns:NotEnoughBudgetError" wsaw:Action="urn:bookOnlyHotelNotEnoughBudgetError" /></wsdl2:operation><wsdl2:operation name="cancelOnlyFlight" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:cancellingOnlyFlight" wsaw:Action="urn:cancellingOnlyFlight" /><wsdl2:output element="tns:cancellingOnlyFlightResponse" wsaw:Action="urn:cancellingOnlyFlightResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:cancelOnlyFlightNotValidOriginFlightError" /><wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:cancelOnlyFlightNotValidDestinationFlightError" /><wsdl2:outfault ref="tns:NotEnoughSeatsFlightError" wsaw:Action="urn:cancelOnlyFlightNotEnoughSeatsFlightError" /><wsdl2:outfault ref="tns:NotValidSeatFlightError" wsaw:Action="urn:cancelOnlyFlightNotValidSeatFlightError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:cancelOnlyFlightRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:cancelOnlyFlightNotValidSessionError" /></wsdl2:operation><wsdl2:operation name="bookOnlyFlight" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:bookingOnlyFlight" wsaw:Action="urn:bookingOnlyFlight" /><wsdl2:output element="tns:bookingOnlyFlightResponse" wsaw:Action="urn:bookingOnlyFlightResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:bookOnlyFlightNotValidOriginFlightError" /><wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:bookOnlyFlightNotValidDestinationFlightError" /><wsdl2:outfault ref="tns:NotEnoughSeatsFlightError" wsaw:Action="urn:bookOnlyFlightNotEnoughSeatsFlightError" /><wsdl2:outfault ref="tns:NotValidSeatFlightError" wsaw:Action="urn:bookOnlyFlightNotValidSeatFlightError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:bookOnlyFlightRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:bookOnlyFlightNotValidSessionError" /><wsdl2:outfault ref="tns:NotEnoughBudgetError" wsaw:Action="urn:bookOnlyFlightNotEnoughBudgetError" /></wsdl2:operation><wsdl2:operation name="checkOnlyFlight" style="http://www.w3.org/ns/wsdl/style/rpc" wrpc:signature="" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><wsdl2:input element="tns:checkingOnlyFlight" wsaw:Action="urn:checkOnlyFlight" /><wsdl2:output element="tns:checkingOnlyFlightResponse" wsaw:Action="urn:checkOnlyFlightResponse" /><wsdl2:outfault ref="tns:NotValidOriginFlightError" wsaw:Action="urn:checkOnlyFlightNotValidOriginFlightError" /><wsdl2:outfault ref="tns:NotValidDestinationFlightError" wsaw:Action="urn:checkOnlyFlightNotValidDestinationFlightError" /><wsdl2:outfault ref="tns:RemoteServiceError" wsaw:Action="urn:checkOnlyFlightRemoteServiceError" /><wsdl2:outfault ref="tns:NotValidSessionError" wsaw:Action="urn:checkOnlyFlightNotValidSessionError" /></wsdl2:operation></wsdl2:interface><wsdl2:binding name="travelAgencySOAP12Binding" interface="tns:travelAgencyInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:version="1.2"><wsdl2:operation ref="tns:checkTrip" wsoap:action="urn:checkTrip" /><wsdl2:operation ref="tns:cancelOnlyHotel" wsoap:action="urn:cancelOnlyHotel" /><wsdl2:operation ref="tns:login" wsoap:action="urn:login" /><wsdl2:operation ref="tns:getCityHotelList" wsoap:action="urn:getCityHotelList" /><wsdl2:operation ref="tns:bookTrip" wsoap:action="urn:bookTrip" /><wsdl2:operation ref="tns:getBudget" wsoap:action="urn:getBudget" /><wsdl2:operation ref="tns:getOriginFlightList" wsoap:action="urn:getOriginFlightList" /><wsdl2:operation ref="tns:checkOnlyHotel" wsoap:action="urn:checkOnlyHotel" /><wsdl2:operation ref="tns:getDestinationFlightList" wsoap:action="urn:getDestinationFlightList" /><wsdl2:operation ref="tns:getHotelHotelList" wsoap:action="urn:getHotelHotelList" /><wsdl2:operation ref="tns:logout" wsoap:action="urn:logout" /><wsdl2:operation ref="tns:bookOnlyHotel" wsoap:action="urn:bookOnlyHotel" /><wsdl2:operation ref="tns:cancelOnlyFlight" wsoap:action="urn:cancelOnlyFlight" /><wsdl2:operation ref="tns:bookOnlyFlight" wsoap:action="urn:bookOnlyFlight" /><wsdl2:operation ref="tns:checkOnlyFlight" wsoap:action="urn:checkOnlyFlight" /></wsdl2:binding><wsdl2:service name="TravelAgencyWS" interface="tns:travelAgencyInterface"><wsdl2:endpoint name="travelAgencyEndPoint" binding="tns:travelAgencySOAP12Binding" address="http://localhost:8080/axis2/services/TravelAgencyWS" /></wsdl2:service></wsdl2:description>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<wsdl2:description xmlns:wsdl2="http://www.w3.org/ns/wsdl"
+			 xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+			 xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" 
+			 xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" 
+			 xmlns:tns="http://hotelbooking.t3.sos.fi.upm.es" 
+			 xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" 
+			 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			 xmlns:whttp="http://www.w3.org/ns/wsdl/http" 
+			 targetNamespace="http://hotelbooking.t3.sos.fi.upm.es">
+		<wsdl2:types>
+        <xs:schema attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://hotelbooking.t3.sos.fi.upm.es">
+				   
+			
+			<xs:element name="checkingHotel">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="city" type="xs:string"/>
+						<xs:element name="hotel" type="xs:string"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="checkingHotelResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="roomAvailability" type="xs:int"/>
+						<xs:element name="price" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingHotel">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="city" type="xs:string"/>
+						<xs:element name="hotel" type="xs:string"/>
+						<xs:element name="room" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="bookingHotelResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="bookingResult" type="xs:boolean"/>
+						<xs:element name="price" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingHotel">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="city" type="xs:string"/>
+						<xs:element name="hotel" type="xs:string"/>
+						<xs:element name="room" type="xs:int"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="cancellingHotelResponse">
+				<xs:complexType>
+					  <xs:sequence>
+						<xs:element name="cancellingResult" type="xs:boolean"/>
+						<xs:element name="returnedMoney" type="xs:double"/>
+					  </xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="city" type="xs:string"/>
+			
+			<xs:element name="cityList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="city" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+			
+			<xs:element name="hotelList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="hotel" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+			<xs:element name="notEnoughRoomsErrorMessage" type="xs:string"/>
+			<xs:element name="notValidCityErrorMessage" type="xs:string"/>
+			<xs:element name="notValidHotelErrorMessage" type="xs:string"/>
+			<xs:element name="notValidRoomErrorMessage" type="xs:string"/>
+			   
+        </xs:schema>
+    </wsdl2:types>
+    
+    <wsdl2:interface name="hotelBookingInterface">
+        
+        <!-- Possible faults in interface -->
+        <wsdl2:fault name="NotEnoughRoomsError" element="tns:notEnoughRoomsErrorMessage"/>
+        <wsdl2:fault name="NotValidCityError" element="tns:notValidCityErrorMessage"/>
+        <wsdl2:fault name="NotValidHotelError" element="tns:notValidHotelErrorMessage"/>
+        <wsdl2:fault name="NotValidRoomError" element="tns:notValidRoomErrorMessage"/> 
+
+        <!-- the RPC style makes easier to map operations to single Java (or C#
+        or whatever) methods, only applicable to in-out or in-only MEPs -->
+        
+        
+        <wsdl2:operation name="getCityList" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="#none" wsaw:Action="urn:getCityList"/>
+            <wsdl2:output element="tns:cityList" wsaw:Action="urn:getCityListResponse"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="getHotelList" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:city" wsaw:Action="urn:getHotelList"/>
+            <wsdl2:output element="tns:hotelList" wsaw:Action="urn:getHotelListResponse"/>
+            <wsdl2:outfault ref="tns:NotValidCityError" wsaw:Action="urn:getHotelListError"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="checkHotel" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:checkingHotel" wsaw:Action="urn:checkHotel"/>
+            <wsdl2:output element="tns:checkingHotelResponse" wsaw:Action="urn:checkHotelResponse"/>
+            <wsdl2:outfault ref="tns:NotValidCityError" wsaw:Action="urn:checkHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidHotelError" wsaw:Action="urn:checkHotelError"/>
+        </wsdl2:operation> 
+        
+        <wsdl2:operation name="bookHotel" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:bookingHotel" wsaw:Action="urn:bookingHotel"/>
+            <wsdl2:output element="tns:bookingHotelResponse" wsaw:Action="urn:bookingHotelResponse"/>
+            <wsdl2:outfault ref="tns:NotValidCityError" wsaw:Action="urn:bookingHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidHotelError" wsaw:Action="urn:bookingHotelError"/>
+            <wsdl2:outfault ref="tns:NotEnoughRoomsError" wsaw:Action="urn:bookingHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidRoomError" wsaw:Action="urn:bookingHotelError"/>
+        </wsdl2:operation>
+        
+        <wsdl2:operation name="cancelHotel" style="http://www.w3.org/ns/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:input element="tns:cancellingHotel" wsaw:Action="urn:cancellingHotel"/>
+            <wsdl2:output element="tns:cancellingHotelResponse" wsaw:Action="urn:cancellingHotelResponse"/>
+            <wsdl2:outfault ref="tns:NotValidCityError" wsaw:Action="urn:cancellingHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidHotelError" wsaw:Action="urn:cancellingHotelError"/>
+            <wsdl2:outfault ref="tns:NotEnoughRoomsError" wsaw:Action="urn:cancellingHotelError"/>
+            <wsdl2:outfault ref="tns:NotValidRoomError" wsaw:Action="urn:cancellingHotelError"/>
+        </wsdl2:operation> 
+               
+    </wsdl2:interface>
+
+
+    <!-- Binding with SOAP (1.2, which is a W3C recommendation) -->
+    <wsdl2:binding name="hotelBookingSOAP12Binding"
+    interface="tns:hotelBookingInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:version="1.2">
+        <!-- With whttp:mep we specify how to map the in-out WSDL MEP to a SOAP MEP (request-response in this case) -->
+        <!-- The whttp:action will be added as a header in the HTTP message -->
+        <wsdl2:operation ref="tns:getCityList" wsoap:action="urn:getCityList"/>
+        <wsdl2:operation ref="tns:getHotelList" wsoap:action="urn:getHotelList"/>
+        <wsdl2:operation ref="tns:checkHotel"  wsoap:action="urn:checkHotel"/>
+        <wsdl2:operation ref="tns:bookHotel" wsoap:action="urn:bookHotel"/>
+        <wsdl2:operation ref="tns:cancelHotel" wsoap:action="urn:cancelHotel"/>
+    </wsdl2:binding>
+
+    <wsdl2:service name="HotelBookingWS" interface="tns:hotelBookingInterface">
+        <wsdl2:endpoint name="hotelBookingEndPoint" binding="tns:hotelBookingSOAP12Binding" address="http://adapt08.ls.fi.upm.es:8080/axis2/services/HotelBookingWS"/>
+    </wsdl2:service>
+</wsdl2:description>
