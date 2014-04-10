@@ -8,12 +8,16 @@
 package es.upm.fi.sos.t3.travelagency;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub;
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.BookingFlight;
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.BookingFlightResponse;
+import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.CancellingFlight;
+import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.CancellingFlightResponse;
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.CheckingFlight;
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.CheckingFlightResponse;
 import es.upm.fi.sos.t3.flightbooking.client.FlightBookingWSStub.Origin;
@@ -24,6 +28,8 @@ import es.upm.fi.sos.t3.flightbooking.client.NotValidSeatError;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.BookingHotel;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.BookingHotelResponse;
+import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.CancellingHotel;
+import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.CancellingHotelResponse;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.CheckingHotel;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.CheckingHotelResponse;
 import es.upm.fi.sos.t3.hotelbooking.client.HotelBookingWSStub.City;
@@ -39,11 +45,29 @@ import es.upm.fi.sos.t3.loginservice.client.LoginServiceWSStub.LoginTokenRespons
  *  TravelAgencyWSSkeleton java skeleton for the axisService
  */
 public class TravelAgencyWSSkeleton{
-	private Budget presupuesto = new Budget();
-	private boolean log = false;
+	//private Budget presupuesto = new Budget();
+	//private boolean log = false;
+	private String currentUser = null;
+	//private int n_reservas = 0;
+	private static Map<String,Budget> listaUserBudget = new HashMap<String,Budget>();
+	private static Map<String,Boolean> listaUserLogin = new HashMap<String,Boolean>();
+	private FlightBookingWSStub FBstub = null;
+	private HotelBookingWSStub HBstub = null;
 
 	public TravelAgencyWSSkeleton(){
-		this.presupuesto.setBudget(10000.0);
+		try {
+			this.FBstub = new FlightBookingWSStub();
+			this.FBstub._getServiceClient().getOptions().setManageSession(true);
+			this.FBstub._getServiceClient().engageModule("addressing");
+			
+			this.HBstub = new HotelBookingWSStub();
+			this.HBstub._getServiceClient().getOptions().setManageSession(true);
+			this.HBstub._getServiceClient().engageModule("addressing");
+			
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -86,7 +110,14 @@ public class TravelAgencyWSSkeleton{
 		response = authCall.getLoginTokenResponse();
 		if(response){ 
 			result.setLoginResponse(true);
-			this.log = true;
+			this.currentUser = username;
+			if(!TravelAgencyWSSkeleton.listaUserBudget.containsKey(username)
+					|| !TravelAgencyWSSkeleton.listaUserLogin.containsKey(username)){
+				Budget presupuesto = new Budget();
+				presupuesto.setBudget(10000.0);
+				listaUserBudget.put(username, presupuesto);
+				listaUserLogin.put(username,true);
+			}
 		}
 		else {
 			result.setLoginResponse(false);
@@ -105,8 +136,10 @@ public class TravelAgencyWSSkeleton{
 
 			)
 	{
-		this.log = false;
-
+		if(listaUserLogin.get(currentUser) == true){
+			listaUserLogin.put(currentUser, false);
+			this.currentUser = null;
+		}
 	}
 
 	/**
@@ -123,8 +156,8 @@ public class TravelAgencyWSSkeleton{
 					throws NotValidSessionError{
 
 
-		if(this.log = false) throw new NotValidSessionError();
-		return this.presupuesto;
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true) throw new NotValidSessionError();
+		return TravelAgencyWSSkeleton.listaUserBudget.get(currentUser);
 	}
 
 	/**
@@ -244,18 +277,35 @@ public class TravelAgencyWSSkeleton{
 
 		boolean hotel_success = BHresponse.getBookingResult();
 		double hotel_price = BHresponse.getPrice();
-
+		
+		/* En caso de fallo en alguna de las reservas, se revierten los cambios del presupuesto
+		 * cancelando las reservas */
+		if(!flight_success){
+			CancellingOnlyFlight cancelFB = new CancellingOnlyFlight();
+			cancelFB.setOrigin(origen);
+			cancelFB.setDestination(ciudad);
+			cancelFB.setSeat(n_asientos);
+			cancelOnlyFlight(cancelFB);
+			if(!hotel_success){
+				CancellingOnlyHotel cancelHB = new CancellingOnlyHotel();
+				cancelHB.setCity(ciudad);
+				cancelHB.setHotel(hotel);
+				cancelHB.setRoom(n_habitaciones);
+				cancelOnlyHotel(cancelHB);
+				}
+		}
+		else if(!hotel_success){
+			CancellingOnlyHotel cancelHB = new CancellingOnlyHotel();
+			cancelHB.setCity(ciudad);
+			cancelHB.setHotel(hotel);
+			cancelHB.setRoom(n_habitaciones);
+			cancelOnlyHotel(cancelHB);
+		}
 
 		/* Preparar respuesta */
 		BookingTripResponse result = new BookingTripResponse();
 		result.setBookingResult(flight_success && hotel_success);
 		result.setPrice(flight_price + hotel_price);
-		
-		double actualizado = this.presupuesto.getBudget() - flight_price - hotel_price;
-
-		/* Actualizar presupuesto */
-		if(flight_success && hotel_success)
-		this.presupuesto.setBudget(actualizado);	
 		
 		return result;
 	}
@@ -277,13 +327,13 @@ public class TravelAgencyWSSkeleton{
 		// lista de los origenes de vuelos
 
 		// Se comprueba la validez de un login previo
-		if(this.log == true){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 
 			OriginFlightList result = new OriginFlightList();
 			String[] listaOrigenes;
 			try {
-				FlightBookingWSStub FBstub = new FlightBookingWSStub();
-				listaOrigenes = FBstub.getOriginList().getOrigin();
+				this.FBstub = new FlightBookingWSStub();
+				listaOrigenes = this.FBstub.getOriginList().getOrigin();
 				result.setOrigin(listaOrigenes);
 			} catch (RemoteException e) {
 				throw new RemoteServiceError();
@@ -316,16 +366,15 @@ public class TravelAgencyWSSkeleton{
 
 		// Se comprueba la validez de un login previo
 
-		if(this.log == true){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 			DestinationFlightList result = new DestinationFlightList();
-			FlightBookingWSStub FBstub;
 			try {
-				FBstub = new FlightBookingWSStub();
+				this.FBstub = new FlightBookingWSStub();
 				String origen = originFlight.getOriginFlight();
 				Origin origin = new Origin();
 				origin.setOrigin(origen);
 
-				String[] listaDestinos = FBstub.getDestinationList(origin).getDestination();
+				String[] listaDestinos = this.FBstub.getDestinationList(origin).getDestination();
 				result.setDestination(listaDestinos);
 			} catch (AxisFault e) {
 				// TODO Auto-generated catch block
@@ -366,18 +415,17 @@ public class TravelAgencyWSSkeleton{
 		// Se comprueba la validez de un login previo
 		// Se comprueba
 
-		if(this.log == true){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 			CheckingOnlyFlightResponse result = new CheckingOnlyFlightResponse();
 			String origen = checkingOnlyFlight.getOrigin();
 			String destino = checkingOnlyFlight.getDestination();
 
-			FlightBookingWSStub FBstub;
 			try {
-				FBstub = new FlightBookingWSStub();
+				this.FBstub = new FlightBookingWSStub();
 				CheckingFlight checkingFlight = new CheckingFlight();
 				checkingFlight.setOrigin(origen);
 				checkingFlight.setDestination(destino);
-				CheckingFlightResponse cfresponse = FBstub.checkFlight(checkingFlight);
+				CheckingFlightResponse cfresponse = this.FBstub.checkFlight(checkingFlight);
 
 				double precioAsientos = cfresponse.getPrice();
 				int numeroAsientos = cfresponse.getSeatAvailability();
@@ -427,35 +475,42 @@ public class TravelAgencyWSSkeleton{
 		//reserva y el precio de la reserva.
 
 
-		if(this.log==true){
-			/* Creamos un objeto de tipo BookingOnlyFlightResponse para la respuesta */
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
+			/* Datos para la peticion al servicio FlightBookingService */
 			BookingOnlyFlightResponse result = new BookingOnlyFlightResponse();
 
-			/* Sacamos los datos de la solicitud */
 			String origen = bookingOnlyFlight.getOrigin();
 			String destino = bookingOnlyFlight.getDestination();
 			int n_asientos = bookingOnlyFlight.getSeat();
+			
+			BookingFlight bookingFlight = new BookingFlight();
+
+			bookingFlight.setOrigin(origen);
+			bookingFlight.setDestination(destino);
+			bookingFlight.setSeat(n_asientos);
 
 			try {
-				/* Creamos un stub del servicio FlightService para realizar la peticion de reserva */
-				FlightBookingWSStub FBstub = new FlightBookingWSStub();
-
-				/* Creamos un objeto del tipo BookingFlight para la peticion al servicio */
-				BookingFlight bookingFlight = new BookingFlight();
-
-				bookingFlight.setOrigin(origen);
-				bookingFlight.setDestination(destino);
-				bookingFlight.setSeat(n_asientos);
-
-				/* Creamos un objeto del tipo BookingFlight para la respuesta del servicio */
+				/* Peticion */
+				this.FBstub = new FlightBookingWSStub();
 				BookingFlightResponse bookingFlightResponse = new BookingFlightResponse();
+				bookingFlightResponse = this.FBstub.bookFlight(bookingFlight);
 
-				/* Llamamos al servicio */
-				bookingFlightResponse = FBstub.bookFlight(bookingFlight);
-
-				/* Establecemos en el objeto a devolver el resultado */
-				result.setBookingResult(bookingFlightResponse.getBookingResult());
-				result.setPrice(bookingFlightResponse.getPrice());
+				/* Respuesta a la peticion*/
+				boolean success = bookingFlightResponse.getBookingResult();
+				double price = bookingFlightResponse.getPrice();
+				
+				result.setBookingResult(success);
+				result.setPrice(price);
+				
+				// Si la reserva tiene exito y el presupuesto lo permite, se actualiza el
+				// presupuesto
+				if(success && listaUserBudget.get(currentUser).getBudget() >= price){
+					Budget currentBudget = listaUserBudget.get(currentUser);
+					Budget newBudget = new Budget();
+					newBudget.setBudget(currentBudget.getBudget() - price);
+					listaUserBudget.put(currentUser, newBudget);
+				}
+				
 
 			} catch (AxisFault e) {
 				// TODO Auto-generated catch block
@@ -497,8 +552,62 @@ public class TravelAgencyWSSkeleton{
 			es.upm.fi.sos.t3.travelagency.CancellingOnlyFlight cancellingOnlyFlight
 			)
 					throws NotValidOriginFlightError,NotValidDestinationFlightError,NotEnoughSeatsFlightError,NotValidSeatFlightError,RemoteServiceError,NotValidSessionError{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#cancelOnlyFlight");
+
+		//este metodo debe cancelar la reserva de un vuelo dado el numero de asientos a cancelar,
+		//la ciudad origen y la ciudad destino. Devolverá un boolean indicando el éxito de la
+		//cancelacion y el precio a devolver. 
+		
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
+			// Datos para la peticion al servicio FlightBookingService
+			CancellingOnlyFlightResponse result = new CancellingOnlyFlightResponse();
+			
+			int n_asientos = cancellingOnlyFlight.getSeat();
+			String origen = cancellingOnlyFlight.getOrigin();
+			String destino = cancellingOnlyFlight.getDestination();
+			
+			CancellingFlight request = new CancellingFlight();
+			request.setOrigin(origen);
+			request.setDestination(destino);
+			request.setSeat(n_asientos);
+			
+			// Peticion
+			try {
+				CancellingFlightResponse response = new CancellingFlightResponse();
+				this.FBstub = new FlightBookingWSStub();
+				response = this.FBstub.cancelFlight(request);
+				
+				// Respuesta a la peticion
+				boolean success = response.getCancellingResult();
+				double price = response.getReturnedMoney();
+				
+				result.setCancellingOnlyFlightResponse(success);
+				
+				// Si la cancelacion tiene exito, se actualiza el presupuesto
+				if(success){
+					Budget currentBudget = listaUserBudget.get(currentUser);
+					Budget newBudget = new Budget();
+					newBudget.setBudget(currentBudget.getBudget() + price);
+					listaUserBudget.put(currentUser, newBudget);
+				}
+				
+			} catch (AxisFault e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				throw new RemoteServiceError();
+			} catch (NotValidOriginError e) {
+				throw new NotValidOriginFlightError();
+			} catch (NotValidDestinationError e) {
+				throw new NotValidDestinationFlightError();
+			} catch (NotEnoughSeatsError e) {
+				throw new NotEnoughSeatsFlightError();
+			} catch (NotValidSeatError e) {
+				throw new NotValidSeatFlightError();
+			}
+			return result;
+		}
+		else
+			throw new NotValidSessionError();
 	}
 
 	/**
@@ -519,10 +628,9 @@ public class TravelAgencyWSSkeleton{
 
 		// Se comprueba la validez de un login previo
 
-		if(this.log == true){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 			CityHotelList result = new CityHotelList();
 
-			HotelBookingWSStub HBstub;
 			try {
 				HBstub = new HotelBookingWSStub();
 				String[] listaCiudades = HBstub.getCityList().getCity();
@@ -560,9 +668,8 @@ public class TravelAgencyWSSkeleton{
 
 		// Se comprueba la validez de un login previo
 
-		if(this.log == true ){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 			HotelHotelList result = new HotelHotelList();
-			HotelBookingWSStub HBstub;
 
 			try {
 				HBstub = new HotelBookingWSStub();
@@ -607,12 +714,11 @@ public class TravelAgencyWSSkeleton{
 		// sobre la ciudad y el hotel sobre la que se consulta.
 
 		// Se comprueba la validez de un login previo
-		if(this.log = true){
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
 		CheckingOnlyHotelResponse result = new CheckingOnlyHotelResponse();
 		String ciudad = checkingOnlyHotel.getCity();
 		String hotel = checkingOnlyHotel.getHotel();
 
-		HotelBookingWSStub HBstub;
 		try {
 			HBstub = new HotelBookingWSStub();
 			CheckingHotel checkingHotel = new CheckingHotel();
@@ -667,35 +773,41 @@ public class TravelAgencyWSSkeleton{
 		//reserva y el precio de la reserva.
 
 
-		if(this.log==true){
-			/* Creamos un objeto de tipo BookingOnlyFlightResponse para la respuesta */
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
+			/* Datos para la peticion */
 			BookingOnlyHotelResponse result = new BookingOnlyHotelResponse();
 
-			/* Sacamos los datos de la solicitud */
 			String ciudad = bookingOnlyHotel.getCity();
 			String hotel = bookingOnlyHotel.getHotel();
 			int n_habitaciones = bookingOnlyHotel.getRoom();
 
+			BookingHotel bookingHotel = new BookingHotel();
+
+			bookingHotel.setCity(ciudad);
+			bookingHotel.setHotel(hotel);
+			bookingHotel.setRoom(n_habitaciones);
+
 			try {
-				/* Creamos un stub del servicio HotelService para realizar la peticion de reserva */
-				HotelBookingWSStub HBstub = new HotelBookingWSStub();
-
-				/* Creamos un objeto del tipo BookingHotel para la peticion al servicio */
-				BookingHotel bookingHotel = new BookingHotel();
-
-				bookingHotel.setCity(ciudad);
-				bookingHotel.setHotel(hotel);
-				bookingHotel.setRoom(n_habitaciones);
-
-				/* Creamos un objeto del tipo BookingHotelResponse para la respuesta del servicio */
+				/* Peticion */
+				HBstub = new HotelBookingWSStub();
 				BookingHotelResponse bookingHotelResponse = new BookingHotelResponse();
-
-				/* Llamamos al servicio */
 				bookingHotelResponse = HBstub.bookHotel(bookingHotel);
-
-				/* Establecemos en el objeto a devolver el resultado */
-				result.setBookingResult(bookingHotelResponse.getBookingResult());
-				result.setPrice(bookingHotelResponse.getPrice());
+				
+				/* Respuesta a la peticion*/
+				boolean success = bookingHotelResponse.getBookingResult();
+				double price = bookingHotelResponse.getPrice();
+				
+				result.setBookingResult(success);
+				result.setPrice(price);
+				
+				// Si la reserva tiene exito y el presupuesto lo permite, se actualiza el
+				// presupuesto
+				if(success && listaUserBudget.get(currentUser).getBudget() >= price){
+					Budget currentBudget = listaUserBudget.get(currentUser);
+					Budget newBudget = new Budget();
+					newBudget.setBudget(currentBudget.getBudget() - price);
+					listaUserBudget.put(currentUser, newBudget);
+				}
 
 			} catch (AxisFault e) {
 				// TODO Auto-generated catch block
@@ -737,8 +849,62 @@ public class TravelAgencyWSSkeleton{
 			es.upm.fi.sos.t3.travelagency.CancellingOnlyHotel cancellingOnlyHotel
 			)
 					throws NotValidCityHotelError,NotValidHotelHotelError,NotEnoughRoomsHotelError,NotValidRoomHotelError,RemoteServiceError,NotValidSessionError{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#cancelOnlyHotel");
+		//este metodo debe cancelar la reserva de un hotel dado el numero de habitaciones a cancelar,
+		//la ciudad y el hotel. Devolverá un boolean indicando el éxito de la
+		//cancelacion y el precio a devolver. 
+		
+		if(TravelAgencyWSSkeleton.listaUserLogin.get(currentUser) == true){
+			// Datos para la peticion al servicio FlightBookingService
+			CancellingOnlyHotelResponse result = new CancellingOnlyHotelResponse();
+			
+			String ciudad = cancellingOnlyHotel.getCity();
+			String hotel = cancellingOnlyHotel.getHotel();
+			int n_habitaciones = cancellingOnlyHotel.getRoom();
+			
+			CancellingHotel request = new CancellingHotel();
+			request.setCity(ciudad);
+			request.setHotel(hotel);
+			request.setRoom(n_habitaciones);
+
+			
+			// Peticion
+			try {
+				CancellingHotelResponse response = new CancellingHotelResponse();
+				HBstub = new HotelBookingWSStub();
+				response = HBstub.cancelHotel(request);
+				
+				// Respuesta a la peticion
+				boolean success = response.getCancellingResult();
+				double price = response.getReturnedMoney();
+				
+				result.setCancellingOnlyHotelResponse(success);
+				
+				// Si la cancelacion tiene exito, se actualiza el presupuesto
+				if(success){
+					Budget currentBudget = listaUserBudget.get(currentUser);
+					Budget newBudget = new Budget();
+					newBudget.setBudget(currentBudget.getBudget() + price);
+					listaUserBudget.put(currentUser, newBudget);
+				}
+				
+			} catch (AxisFault e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				throw new RemoteServiceError();
+			} catch (NotValidCityError e) {
+				throw new NotValidCityHotelError();
+			} catch (NotValidHotelError e) {
+				throw new NotValidHotelHotelError();
+			} catch (NotEnoughRoomsError e) {
+				throw new NotEnoughRoomsHotelError();
+			} catch (NotValidRoomError e) {
+				throw new NotValidRoomHotelError();
+			}
+			return result;
+		}
+		else
+			throw new NotValidSessionError();
 	}
 
 }
